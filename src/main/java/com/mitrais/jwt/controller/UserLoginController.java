@@ -1,35 +1,37 @@
 package com.mitrais.jwt.controller;
 
-import com.mitrais.jwt.entity.UserLoginEntity;
-import com.mitrais.jwt.mapper.UserLoginMapper;
 import com.mitrais.jwt.model.UserLogin;
-import com.mitrais.jwt.repository.UserLoginRepository;
+import com.mitrais.jwt.service.UserLoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/user")
 public class UserLoginController {
 
-    private UserLoginRepository userLoginRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private UserLoginMapper userLoginMapper;
+    private UserLoginService userLoginService;
 
-    public UserLoginController(UserLoginRepository userLoginRepository, BCryptPasswordEncoder bCryptPasswordEncoder, UserLoginMapper userLoginMapper) {
-        this.userLoginRepository = userLoginRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.userLoginMapper = userLoginMapper;
+    public UserLoginController(UserLoginService userLoginService) {
+        this.userLoginService = userLoginService;
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody UserLogin user) {
-        user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
-        UserLoginEntity userLoginEntity = userLoginMapper.mapUserLoginToEntity(user);
-        userLoginRepository.save(userLoginEntity);
-        return new ResponseEntity("User sign up is successful", HttpStatus.OK);
+        userLoginService.setUserSignUp(user);
+        return new ResponseEntity("User has signed up successfully", HttpStatus.OK);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody UserLogin user) {
+        return new ResponseEntity(user.getUsername() + " has logged in successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity userAuthorization() {
+        return new ResponseEntity("User Authorization is successful", HttpStatus.OK);
+    }
 }
