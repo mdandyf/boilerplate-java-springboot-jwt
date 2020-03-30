@@ -17,8 +17,11 @@ public class UserLoginEntity implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "last_token")
-    private String lastToken;
+    @Column(name = "access_token")
+    private String accessToken;
+
+    @Column(name = "expiry_date")
+    private Timestamp expiryDate;
 
     @Column(name = "last_login_success")
     private Timestamp lastLoginSuccess;
@@ -66,12 +69,20 @@ public class UserLoginEntity implements Serializable {
         this.lastLoginFailed = lastLoginFailed;
     }
 
-    public String getLastToken() {
-        return lastToken;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setLastToken(String lastToken) {
-        this.lastToken = lastToken;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public Timestamp getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Timestamp expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     @Override
